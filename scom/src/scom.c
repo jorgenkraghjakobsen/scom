@@ -800,10 +800,10 @@ int   adc = 0;
 
 long spispeed = 100000;    // spi clock reduced by 4 time due to timing jkj 31.8.2013
 int i2c_address;
+char scom_serial[] = "";
 
-
-const double version                  = 0.64;
-const unsigned char release_note[128] = { "OTP ECC general read out rev2"} ;
+const double version                  = 0.65;
+const unsigned char release_note[128] = { "Serial .scom_serial to open by serial nummber"} ;
 
 const char space[] = " ";
 const char clear[4] = { 0xff, 0xff, 0xff, 0xff };
@@ -829,7 +829,10 @@ int main(int argc, char **argv)
   FILE *com_file;                         // .com_i2c i2c_address
   unsigned int com_if = 0;                // Default spi
   unsigned int i2c_device = 1;            // Default i2c device pin 3/5 on raspberry pi
-                                          // -i2c_dev 0 to force alternaitve i2c bus pin
+                                                                    // -i2c_dev 0 to force alternaitve i2c bus pin
+  
+  FILE *scom_file_handle;
+
   unsigned char line[128];                // buffer for read in .com_i2c pin 27/28
 
   FILE *fp;
@@ -854,7 +857,10 @@ int main(int argc, char **argv)
   // Commmand line parsing and default values
   // Print version -v[0..1]  -v  Version string
   //                         -v0 Version nr only
+  FILE *scom_serial_handle;
+  unsigned char scom_serial[16] = "";
   unsigned char serial[10] = "";
+  
   unsigned char cli_serial[16] = "";
   unsigned char cli_arg[48] = "";
   int serial_length;
@@ -993,6 +999,7 @@ int main(int argc, char **argv)
 #endif
 #endif
               exit(0);
+	      
             }
         }
       else
@@ -1001,6 +1008,20 @@ int main(int argc, char **argv)
           strcat(cmdline,space);
         }
     }
+  printf("Debug in looking for scom_serial\n");
+  if (strlen(serial) == 0) 
+  
+  { scom_file_handle = fopen(".scom_serial", "r");
+    if (scom_file_handle != NULL)
+    { fgets(line, 127,scom_file_handle);
+      if (debug) 
+      printf("Read .scom_serial :%s %d        \n",line, (int)strlen(line) );
+      line[(int)strlen(line)-1] = 0;
+      strcopy(serial, line);
+
+      fclose(scom_file_handle);
+    }      
+  }
 
   if (com_if == 0)
     { com_file = fopen(".com_i2c", "r");
@@ -1723,7 +1744,7 @@ int main(int argc, char **argv)
       return 1;
     }
   if (strlen(serial)>0)
-    { if (debug) { printf("DEbug open: %s\n",serial); }
+    { if (debug) { printf("Debug open: %s\n",serial); }
       i = ftdi_usb_open_desc(&fc, 0x0403, 0x6010,NULL, serial);
     } else {
     i = ftdi_usb_open_desc(&fc, 0x0403, 0x6010,NULL, NULL);
