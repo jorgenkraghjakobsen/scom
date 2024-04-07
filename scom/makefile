@@ -129,7 +129,7 @@ scom2_diff: src/scom2_diff.c
 scom_x86: $(libftdi)
 	gcc -g $(FTDI_CFLAGS) -c src/i2c_mpsse.c ;\
 	gcc -g -c src/ftdispi.c ;\
-	gcc -o $(BINDIR)/scom -DX86_LINUX $(FTDI_CFLAGS) $(FTDISPI_CFLAGS) src/scom.c $(FTDISPI_LDFLAGS) $(FTDI_LDFLAGS) -lmysqlclient ftdispi.o i2c_mpsse.o
+	gcc -o $(BINDIR)/scom -DX86_LINUX $(FTDI_CFLAGS) $(FTDISPI_CFLAGS) src/scom.c $(FTDISPI_LDFLAGS) $(FTDI_LDFLAGS) -lmariadbclient ftdispi.o i2c_mpsse.o
 
 install_scom:
 	cp $(BINDIR)/scom $(install_db_target)
@@ -216,16 +216,16 @@ include_json:
 include_json_rev2:
 	echo "select * from rs_ma120_rev2" | mysqlsh --sql --result-format=json/array --uri=merus_r01@devrd-db.vih.infineon.com/merus > rs_ma120_rev2.json ;\
 	echo "select * from sl_ma120_rev2" | mysqlsh --sql --result-format=json/array --uri=merus_r01@devrd-db.vih.infineon.com/merus > ls_ma120_rev2.json  
+
 install:
-	sudo cp sdif /opt/bin ; \
-	sudo cp $(BINDIR)/scom /opt/bin ;	\
-	sudo cp $(BINDIR)/db_lookup /opt/bin ; \
-	sudo cp $(BINDIR)/db_list /opt/bin ; \
+	sudo cp $(BINDIR)/scom /usr/local/bin ;	\
+	sudo cp $(BINDIR)/db_lookup /usr/local/bin ; \
+	sudo cp $(BINDIR)/db_list /usr/local/bin ; \
 	sudo cp bash_comp/scom /etc/bash_completion.d
 
 #        sudo cp tag /opt/bin ; \
 
-dev:
-	echo "ACTION==\"add\", SUBSYSTEM==\"usb_device\", ATTRS{idVendor}==\"0403\",ATTRS{idProduct}==\"6010\", MODE=\"0666\", RUN+=\"/opt/bin/ftdi_loaded\"" > /etc/udev/rules.d/ftdi.rules ;\
-	echo "echo \"ftdi dev ready\" > /var/log/ftdi_loaded.log" > /opt/bin/ftdi_loaded ; \
-	chmod 755 /opt/bin/ftdi_loaded
+udev:
+	cp udev/55-ftdi.rules /etc/udev/rules.d/ ;\
+	cp udev/scom_notify_ftdi.sh /usr/local/bin ;\
+	udevadm control --reload-rules

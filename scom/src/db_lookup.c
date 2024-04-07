@@ -1,4 +1,4 @@
-#include <mysql/mysql.h>
+#include <mariadb/mysql.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -131,13 +131,6 @@ int main(int argc, char **argv)
   
   if (db_version == 1) {   
     if (mysql_real_connect(conn, "192.168.1.21", "jakobsen","merussql", db_database, 0, NULL, 0) == NULL)
-    { fprintf(stderr,"%s\n" , mysql_error(conn));
-      mysql_close(conn);
-      exit(1);
-    }
-  }
-  else 
-  { if (mysql_real_connect(conn, "devrd-db.vih.infineon.com", "merus_r01","1zqFkTgxGTYMg.U", "merus", 0, NULL, 0) == NULL)
     { fprintf(stderr,"%s\n" , mysql_error(conn));
       mysql_close(conn);
       exit(1);

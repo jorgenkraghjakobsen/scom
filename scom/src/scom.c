@@ -651,7 +651,7 @@ unsigned int otp_read_device_id(unsigned char *cli_arg)
   
   sprintf(cmd,"scom w 0x60c 0 %s; scom r 0x60c -od %s",cli_arg, cli_arg);
   fp = popen(cmd,"r");
-  fscanf(fp,"%d ",&hwid);
+  fscanf(fp,"%s ",&hwid);
   pclose(fp);       
   
   if (debug==1) { printf("hwid : 0x%02x \n",hwid);  }
@@ -1008,7 +1008,7 @@ int main(int argc, char **argv)
           strcat(cmdline,space);
         }
     }
-  printf("Debug in looking for scom_serial\n");
+  //printf("Debug in looking for scom_serial\n");
   if (strlen(serial) == 0) 
   
   { scom_file_handle = fopen(".scom_serial", "r");
@@ -1017,7 +1017,7 @@ int main(int argc, char **argv)
       if (debug) 
       printf("Read .scom_serial :%s %d        \n",line, (int)strlen(line) );
       line[(int)strlen(line)-1] = 0;
-      strcopy(serial, line);
+      strcpy(serial, line);
 
       fclose(scom_file_handle);
     }      

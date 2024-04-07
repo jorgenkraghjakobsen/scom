@@ -1,0 +1,13 @@
+# Rule for FTDI device with VID 0x0403 and PID 0x6010 (no logout required)
+
+ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6010"  {
+
+  # Assign the device to group "dialout" for user access
+  GROUP="dialout"
+
+  # Set permissions for group read/write
+  MODE="0666"
+
+  # Trigger a script to notify the user (optional, replace 'notify_ftdi.sh' with your script)
+  RUN+="/usr/local/bin/scom_notify_ftdi.sh"
+}

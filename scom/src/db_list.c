@@ -1,4 +1,4 @@
-#include <mysql/mysql.h>
+#include <mariadb/mysql.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -20,9 +20,6 @@ int main(int argc, char* argv)
           "merussql", NULL, 0, NULL, 0);
   mysql_query(conn, "use merus_ic_trunk");
 
-//  mysql_real_connect(conn, "devrd-db.vih.infineon.com", "merus_r01", 
-//          "1zqFkTgxGTYMg.U", NULL, 0, NULL, 0); 
-//  mysql_query(conn, "use merus");
 
   sprintf(str,"select register_map from master_register_map");
   mysql_query(conn, str);

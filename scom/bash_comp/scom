@@ -5,9 +5,9 @@ _scom() {
  prev="${COMP_WORDS[COMP_CWORD-1]}"
 
  default="r w d b u q"
- dmux_inputs=`/bin/db_lookup system.d0_mux_sel` 
- symbols=`/bin/db_lookup`
- tables=`/bin/db_list`
+ dmux_inputs=`/usr/local/bin/db_lookup system.d0_mux_sel` 
+ symbols=`/usr/local/bin/db_lookup`
+ tables=`/usr/local/bin/db_list`
  
  COMPREPLY=()
  case "${prev}" in
