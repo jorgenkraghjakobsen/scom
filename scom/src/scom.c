@@ -802,7 +802,7 @@ long spispeed = 100000;    // spi clock reduced by 4 time due to timing jkj 31.8
 int i2c_address;
 char scom_serial[] = "";
 
-const double version                  = 0.65;
+const double version                  = 0.66;
 const unsigned char release_note[128] = { "Serial .scom_serial to open by serial nummber"} ;
 
 const char space[] = " ";
