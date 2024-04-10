@@ -1290,18 +1290,7 @@ int main(int argc, char **argv)
       nw = 1;
       adc = 1;
       break;
-    case 't'  : if (cmdarg[0][1] == 0)
-        {  nr = 0;
-          nw = 2;
-          dac = getvalue(cmdarg[1]);
-          if (dac>4095)
-            { printf("DAC range 0-4095 \n");
-              exit(1);
-            }
-          wbuf[0] = 0x30 + dac/256;
-          wbuf[1] = dac%256 ;
-        }
-      else
+    case 't'  : 
         { // Get register position, address and pressent value
           // Enter a loop where value can be trimmed like.
 
@@ -1346,7 +1335,7 @@ int main(int argc, char **argv)
             }
           exit(0);
         }
-      break;
+        break;
     case 'd'  : spispeed = 4000000;
       adr  = getvalue(cmdarg[1]);
       data = getvalue(cmdarg[2]);
